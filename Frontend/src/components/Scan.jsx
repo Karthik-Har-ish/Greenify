@@ -1,17 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Webcam from "react-webcam";
+import * as tf from "@tensorflow/tfjs";
+import * as tmImage from "@teachablemachine/image"
 
 
-async function saveBase64AsFile(base64, filename) {
+
+
+async function saveBase64AsFile(base64) {
   const response = await fetch(base64);
   const blob = await response.blob();
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const img = await URL.createObjectURL(blob);
+  console.log(img)
+  return (<img src={img} alt="garbage image"></img>);
 }
+async function init(){
+  const URL = "https://teachablemachine.withgoogle.com/models/ZP3W6suLr/"
+  console.log(tmImage)
+  const model = await tmImage.load(URL+"model.json",URL+"metadata.json")
+  
+  console.log(model)
+
+  return model
+}
+
+
 
 const videoConstraints = {
   width: 1280,
@@ -19,8 +31,7 @@ const videoConstraints = {
   facingMode: "user"
 };
 
-const WebcamCapture = () => (
-  
+const WebcamCapture = (props) => (
   
   <Webcam
     audio={false}
@@ -31,17 +42,10 @@ const WebcamCapture = () => (
   >
     {({ getScreenshot }) => (
       <button
-        onClick={() => {
-          const imageSrc = getScreenshot()
-          saveBase64AsFile(imageSrc, 'image.jpg')
-          .then(() => {
-            console.log('File saved successfully')
-            imgTaken = true;
-          })
-          .catch((error) => {
-            console.error('Error saving file:', error)
-          })
-          
+        onClick={async () => {
+          const imageSrc = getScreenshot()  
+          const imgEl = await saveBase64AsFile(imageSrc)
+          props.setImage(imgEl)
         }}
       >
         Capture photo
@@ -52,15 +56,29 @@ const WebcamCapture = () => (
 
 const Scan = () => {
 
+  
+  let [image,setImage] = React.useState(null)
+
+  const model = init()
+  .then(()=>console.log("model loaded"))
+
+
+
+
   let imgTaken = false;
   return (
     <div>
       <h1>Scan your garbage here:</h1>
 
     <div className='camera-container'>
-      {imgTaken ? <img src="image.jpg" alt="captured image" /> : <WebcamCapture />}
+      <WebcamCapture setImage={setImage} />
       
     </div>
+
+    <div className="waste-type">
+      
+    </div>
+    {}
     </div>
   )
 }

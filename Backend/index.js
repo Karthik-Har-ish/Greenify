@@ -1,4 +1,6 @@
 const express = require("express");
+const jwt = require("jsonwebtoken")
+
 require("./connection");
 const cors = require("cors");
 const userModel = require("./models/user");
@@ -7,19 +9,12 @@ const authenticationMiddleware = require("./authentication");
 const app = express();
 const PORT = 3000;
 
+const tokenAPI = express()
+
 // Middleware
 app.use(express.json());
 app.use(cors());
 
-app.use(
-    session({
-      secret: process.env.SESSION_SECRET,        
-      maxAge: 1000 * 60 * 60 * 24 * 1,           
-      httpOnly: true,                            
-      secure: process.env.NODE_ENV === "production",  
-    })
-  );
-app.use(authenticationMiddleware)
 
 
   // APIs
@@ -34,7 +29,9 @@ app.post("/signup", async (req, res) => {
     });
     res.send("User signed up successfully");
 });
-    
+
+
+
 
 app.get("/users", async (req, res) => {
     const users = await userModel.find()
@@ -43,16 +40,36 @@ app.get("/users", async (req, res) => {
         res.send("Error fetching users");
     }
     );
-    res.json(users);
+    res.json({message:"Sent info on all users!",users});
 })
 
+app.get("/api-verify-auth",(req,res)=>{
+    const token = req.body.authorization
 
+    if (!token){
+        console.log("hello world")
+        return res.status(401).json({isAuthenticated:false});
+    }
+    else{
+        console.log(token)
+    }
+    try{
+        const decoded = jwt.verify(token, "secret-key");
+        res.status(200).json({isAuthenticated:true,user:decoded})
+    }
+    catch(err){
+        res.status(401).json({isAuthenticated:false,message:"Error while authentication"});
+    }
+    }
+)
 
 app.post("/login", async (req, res) => {
+    console.log("Login request received");
     console.log(req.body);
     const user = await userModel.findOne({"userName":req.body.userName})
     
     if (!user) {
+        console.log("User not found");
         return res.json({message:"User not found"});
     }
     else{
@@ -63,8 +80,8 @@ app.post("/login", async (req, res) => {
         return res.json({message:"Incorrect password"});
     }
     res.json({message:"Login successful"});
-    req.session._id = user._id;
-    req.session.password = user.password;
+    // req.session._id = user._id;
+    // req.session.password = user.password;
 
     }
 );
@@ -80,7 +97,7 @@ app.post("/points-inc", async (req, res) => {
     });
 })
 
-app.post("/profile", isAuthenticated, async (req, res) => {
+app.post("/profile", async (req, res) => {
     const user = userModel.findOne({"userName":req.body.userName})
     .catch((err) => {
         console.error(err);

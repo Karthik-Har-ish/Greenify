@@ -4,12 +4,16 @@ const Navbar = () => {
   return (
     <nav className='navbar'>
 
-        <div className="greenify-header-and-icon">
-        <h1>Greenify</h1>
+        <div className="greenify-icon">
+        
         
         <img className='logo' src="logo.png" alt="Logo" />
+        
         </div>
         
+      <h1 className='greenify-header'>Greenify</h1>
+
+      <div className="profile-and-options">
       <ul>
         <li>
           <a href="/home">Home</a>
@@ -22,7 +26,9 @@ const Navbar = () => {
         </li>
       </ul>
 
-      <a href="/login"><img className='login-icon' src="login.png" alt="login" /></a>
+      <a href="/"><img className='login-icon' src="login.png" alt="login" /></a>
+      </div>
+      
     </nav>
   )
 }

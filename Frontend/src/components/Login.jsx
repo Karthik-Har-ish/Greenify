@@ -1,11 +1,24 @@
 import React from 'react'
+import axios from 'axios'
 
-const Login = () => {
+const Login = (props) => {
 
-    const loginSubmit = (e) => {
-        e.preventDefault();
-        const username = e.target.username.value;
-        const password = e.target.password.value;
+    const loginSubmit = (formData) => {
+
+        const username = formData.get("username");
+        const password = formData.get("password");
+        axios.post('http://localhost:3000/login', {userName:username, password:password})
+        .then((res) => {
+            console.log("Response: ", res);
+            if(res.data.message === 'Login successful') {
+                window.location.href = '/home';
+            } else {
+                console.log(res.data.message)
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
   return (
     <div className='form-container'>
@@ -18,5 +31,7 @@ const Login = () => {
     </div>
   )
 }
+
+
 
 export default Login

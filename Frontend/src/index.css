@@ -71,15 +71,28 @@ button:focus-visible {
   height: 20vh;
 }
 
-.greenify-header-and-icon{
+.greenify-icon{
   display: flex;
   align-items: center;
-  width: 100%;
   height: 100%;
   padding: 0px 40px;
 }
 
-.navbar > ul {
+.greenify-header{
+  width: fit-content;
+  text-align: center;
+  transform: translateX(11vw);
+  font-size: 2em;
+}
+
+.profile-and-options{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 34vw;
+  padding: 20px 20px 20px 0px;
+}
+.profile-and-options > ul {
   list-style-type: none;
   display: flex; 
   margin: 0;
@@ -88,6 +101,9 @@ button:focus-visible {
   width: 25vw;
   height: 100%;
   padding: 0px 40px;
+}
+.profile-and-options > ul > li {
+  margin: 0px 1vw;
 }
 .logo{
   width: 20vh;
@@ -134,9 +150,10 @@ button:focus-visible {
 
 .login-icon{
   width: 10vw;
-  margin-right: 10px;
-  fill: var(--white);
+  margin-right: 30px;
 }
+
+
 
 /* Dashboard */
 
