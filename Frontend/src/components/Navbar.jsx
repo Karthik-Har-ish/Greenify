@@ -12,17 +12,17 @@ const Navbar = () => {
         
       <ul>
         <li>
-          <a href="/">Home</a>
+          <a href="/home">Home</a>
         </li>
         <li>
-          <a href="/about">About</a>
+          <a href="/leaderboard">Leaderboard</a>
         </li>
         <li>
-          <a href="/contact">Contact</a>
+          <a href="/scan">Scan</a>
         </li>
       </ul>
 
-      <img className='login-icon' src="login.png" alt="login" />
+      <a href="/login"><img className='login-icon' src="login.png" alt="login" /></a>
     </nav>
   )
 }

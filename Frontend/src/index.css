@@ -203,3 +203,22 @@ button:focus-visible {
   border: 1px solid var(--black-green);
   padding:10px 10px
 }
+
+/* scan page */
+
+.camera-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80vw;
+  padding: 20px;
+  margin-top: 40px;
+  place-self: center;
+  background-color: var(--black-green);
+  border-radius: 20px;
+}
+
+.camera{
+  border-radius: 12px;
+}
