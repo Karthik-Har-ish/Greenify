@@ -229,16 +229,29 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80vw;
   padding: 20px;
   margin-top: 40px;
   place-self: center;
   background-color: var(--black-green);
   border-radius: 20px;
 }
+.camera-container > button{
+  background-color: var(--white);
+  color: var(--black-green);
+}
 
 .camera{
-  border-radius: 12px;
+  border-radius: 2vw;
+}
+
+.prediction{
+  margin-top: 20px;
+  place-self: center;
+  text-align: center;
+  background-color: var(--black-green);
+  padding: 3vw;
+  border-radius: 2vw;
+  color: var(--white);
 }
 
 /* Sign up page */

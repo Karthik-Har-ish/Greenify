@@ -78,7 +78,7 @@ const Scan = () => {
 
   return (
     <div>
-      <h1>Scan your garbage here:</h1>
+      <h1 className="header">Scan your garbage here:</h1>
       <div className="camera-container">
         <WebcamCapture setImage={setImage} handleCapture={handleCapture} />
       </div>

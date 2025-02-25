@@ -9,13 +9,11 @@ const ProtectedRoute = ({children}) => {
     useEffect(()=>{
         const verifyAuth = async ()=>{
             const token = localStorage.getItem('token');
-            console.log(token)
             if(!token){
                 setIsAuthenticated(false)
                 setIsLoading(false)
                 return;
             }
-            
             await axios.get("http://localhost:3000/api-verify-auth", {
                 headers: {
                   Authorization: token,

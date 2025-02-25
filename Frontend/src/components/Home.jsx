@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const Home = () => {
 
-  
+  React.useEffect(()=>{},[])
   
   return (
     <>

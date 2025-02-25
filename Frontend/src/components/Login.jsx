@@ -13,12 +13,15 @@ const Login = (props) => {
             console.log("Response: ", res);
             if(res.data.message === 'Login successful') {
                 const token=res.data.token;
+                const userId=res.data.userId;
                 console.log("Login successful, token saved: ", token)
                 localStorage.setItem("token",token)
+                localStorage.setItem("userId",userId)
                 
                 window.location.href = '/home';
             } else {
                 console.log(res.data.message)
+                alert(res.data.message)
             }
         })
         .catch((err) => {

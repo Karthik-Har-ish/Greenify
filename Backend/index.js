@@ -80,12 +80,23 @@ app.post("/login", async (req, res) => {
         return res.json({message:"Incorrect password"});
     }
     const token = jwt.sign({ userId: user.id }, "secret-key", { expiresIn: "1h" });
-    res.json({ message: "Login successful", token });
+    res.json({ message: "Login successful", token, userId:user.id });
     // req.session._id = user._id;
     // req.session.password = user.password;
 
     }
 );
+
+app.get("/profile/:id", async (req,res) => {
+    const userDetails = await userModel.findById(req.params.id)
+    .then(()=>{
+        res.json({userDetails})
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.json({message:"Error in retrieving profile details!"})
+    });
+})
 
 app.post("/points-inc", async (req, res) => {
     await userModel.updateOne({"userName":req.body.userName},{$inc:{"points":req.body.inc}})
