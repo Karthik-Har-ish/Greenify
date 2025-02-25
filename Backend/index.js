@@ -88,14 +88,14 @@ app.post("/login", async (req, res) => {
 );
 
 app.get("/profile/:id", async (req,res) => {
+    console.log(req.params.id)
     const userDetails = await userModel.findById(req.params.id)
-    .then(()=>{
-        res.json({userDetails})
-    })
     .catch((err)=>{
         console.log(err)
         res.json({message:"Error in retrieving profile details!"})
     });
+    console.log(userDetails)
+    res.json({user:userDetails})
 })
 
 app.post("/points-inc", async (req, res) => {
