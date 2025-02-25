@@ -3,10 +3,22 @@ import axios from 'axios';
 
 const Home = () => {
 
-  React.useEffect(()=>{},[])
+  const [user,setUser]=React.useState("")
+
+  React.useEffect(()=>{
+    const id = localStorage.getItem("userId")
+    axios.get("http://localhost:3000/profile/"+id)
+    .then((res)=>{
+      setUser(res.data.user)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
   
   return (
     <>
+    <h1 className='header'>Hello {user.userName}!</h1>
     <h1 className="header" >Dashboard:</h1>
     <div className="cards">
         <div className='card'>
