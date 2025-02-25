@@ -44,7 +44,7 @@ app.get("/users", async (req, res) => {
 })
 
 app.get("/api-verify-auth",(req,res)=>{
-    const token = req.body.authorization
+    const token = req.headers.authorization
 
     if (!token){
         console.log("hello world")
@@ -79,7 +79,8 @@ app.post("/login", async (req, res) => {
         console.log(user.password)
         return res.json({message:"Incorrect password"});
     }
-    res.json({message:"Login successful"});
+    const token = jwt.sign({ userId: user.id }, "secret-key", { expiresIn: "1h" });
+    res.json({ message: "Login successful", token });
     // req.session._id = user._id;
     // req.session.password = user.password;
 

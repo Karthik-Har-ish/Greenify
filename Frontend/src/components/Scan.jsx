@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from "react";
 import Webcam from "react-webcam";
-import * as tf from "@tensorflow/tfjs";
-import * as tmImage from "@teachablemachine/image"
-
-
-
+import * as tmImage from "@teachablemachine/image";
 
 async function saveBase64AsFile(base64) {
   const response = await fetch(base64);
   const blob = await response.blob();
-  const img = await URL.createObjectURL(blob);
-  console.log(img)
-  return (<img src={img} alt="garbage image"></img>);
-}
-async function init(){
-  const URL = "https://teachablemachine.withgoogle.com/models/ZP3W6suLr/"
-  console.log(tmImage)
-  const model = await tmImage.load(URL+"model.json",URL+"metadata.json")
-  
-  console.log(model)
-
-  return model
+  return blob;
 }
 
-
+async function init() {
+  const URL = "https://teachablemachine.withgoogle.com/models/ZP3W6suLr/";
+  const model = await tmImage.load(URL + "model.json", URL + "metadata.json");
+  return model;
+}
 
 const videoConstraints = {
   width: 1280,
   height: 720,
-  facingMode: "user"
+  facingMode: "user",
 };
 
-const WebcamCapture = (props) => (
-  
+const WebcamCapture = ({ setImage, handleCapture }) => (
   <Webcam
     audio={false}
     height={480}
@@ -43,9 +31,11 @@ const WebcamCapture = (props) => (
     {({ getScreenshot }) => (
       <button
         onClick={async () => {
-          const imageSrc = getScreenshot()  
-          const imgEl = await saveBase64AsFile(imageSrc)
-          props.setImage(imgEl)
+          const imageSrc = getScreenshot();
+          const imgBlob = await saveBase64AsFile(imageSrc);
+          const imageUrl = URL.createObjectURL(imgBlob); // Create object URL
+          setImage(imageUrl); // Set the image URL for display
+          handleCapture(imgBlob); // Call handleCapture with the blob
         }}
       >
         Capture photo
@@ -55,32 +45,51 @@ const WebcamCapture = (props) => (
 );
 
 const Scan = () => {
+  const [image, setImage] = useState(null);
+  const [prediction, setPrediction] = useState(null);
+
+  const handleCapture = async (imageBlob) => {
+    const model = await init(); // Load the model
+    const imgElement = document.createElement("img");
+    imgElement.src = URL.createObjectURL(imageBlob);
+
+    // Wait for the image to load
+    await new Promise((resolve) => {
+      imgElement.onload = resolve;
+    });
+
+    // Make predictions
+    const prediction = await model.predict(imgElement);
+    console.log(prediction);
+    setPrediction(prediction);
+    console.log(maxProbability(prediction))
+  };
 
   
-  let [image,setImage] = React.useState(null)
+  const maxProbability = (prediction) => {
+    let maxProbability = {className:"",probability:0}
+    for(let i=0;i<prediction.length;i++){
+      if (prediction[i].probability>maxProbability.probability){
+        maxProbability=prediction[i]
+      }
+    }
+    return(maxProbability)
+  }
 
-  const model = init()
-  .then(()=>console.log("model loaded"))
-
-
-
-
-  let imgTaken = false;
   return (
     <div>
       <h1>Scan your garbage here:</h1>
-
-    <div className='camera-container'>
-      <WebcamCapture setImage={setImage} />
-      
+      <div className="camera-container">
+        <WebcamCapture setImage={setImage} handleCapture={handleCapture} />
+      </div>
+      <div className="prediction">
+        {image && <img src={image} alt="captured" />} {/* Use image directly */}
+        {prediction && (
+          <h1>{maxProbability(prediction).className}</h1>
+        )}
+      </div>
     </div>
+  );
+};
 
-    <div className="waste-type">
-      
-    </div>
-    {}
-    </div>
-  )
-}
-
-export default Scan
+export default Scan;

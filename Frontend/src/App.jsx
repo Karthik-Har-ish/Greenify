@@ -6,6 +6,7 @@ import { Routes,Route } from "react-router-dom"
 import Leaderboard from "./components/Leaderboard"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Scan from "./components/Scan"
+import Signup from "./components/Signup"
 function App() {
   
   return (
@@ -13,6 +14,7 @@ function App() {
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Login/>}></Route>
+        <Route path="/signup" element={<Signup/>}></Route>
 
         
         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>

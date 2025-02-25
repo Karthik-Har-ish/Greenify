@@ -116,6 +116,7 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
+  place-self: center;
   justify-content: center;
   width: 25vw;
   padding: 20px;
@@ -150,7 +151,7 @@ button:focus-visible {
 
 .login-icon{
   width: 10vw;
-  margin-right: 30px;
+  object-fit: cover;
 }
 
 
@@ -238,4 +239,15 @@ button:focus-visible {
 
 .camera{
   border-radius: 12px;
+}
+
+/* Sign up page */
+
+.sign-up-anchor{
+  color:var(--black-green);
+  text-decoration: underline;
+}
+
+.padding-top{
+  padding-top: 30px;
 }

@@ -16,13 +16,16 @@ const ProtectedRoute = ({children}) => {
                 return;
             }
             
-            await axios.get("http://localhost:3000/api-verify-auth",{authorization:"secret-key"})
+            await axios.get("http://localhost:3000/api-verify-auth", {
+                headers: {
+                  Authorization: token,
+                },
+              })
             .then((res)=>{
                 console.log(res)
-                setIsAuthenticated(res.isAuthenticated)
-                
+                setIsAuthenticated(res.data.isAuthenticated)
                 console.log("Site loaded!");
-                setLoading(false)
+                setIsLoading(false)
             })
             .catch((err)=>{
                 console.log("Error verifying auth: ",err);
@@ -30,8 +33,9 @@ const ProtectedRoute = ({children}) => {
             })
             
 
-        verifyAuth();
+        
         }
+        verifyAuth();
     },[])
 
     if(isLoading){
@@ -39,12 +43,12 @@ const ProtectedRoute = ({children}) => {
     }
 
     if (!isAuthenticated){
-        return <Navigate to="/login"/>
+        return <Navigate to="/"/>
     }
 
 
 return (
-    {children}
+    children
     )
 };
 

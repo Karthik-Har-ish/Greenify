@@ -1,3 +1,5 @@
+names = ["Karthik","Navee"]
+
 console.log(
     JSON.stringify({
         userName: "Karthik",
